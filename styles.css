@@ -1,0 +1,386 @@
+/* AI 海龟汤 —— 悬疑暗色主题 */
+
+:root {
+  --bg: #0a0c10;
+  --panel: #12151b;
+  --panel-2: #1a1e26;
+  --border: #262b35;
+  --text: #e6e4e1;
+  --text-dim: #878c98;
+  --text-faint: #5d626d;
+
+  --accent: #a5353a;
+  --accent-lit: #c9484e;
+  --gold: #c9a24d;
+  --green: #6fbf90;
+  --red: #d97070;
+  --amber: #d3a05c;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: radial-gradient(900px 420px at 50% -140px, rgba(165, 53, 58, .13), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: var(--vvh, 100dvh);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ------------------------------- 顶部：汤面卡 ------------------------------- */
+
+.puzzle-bar {
+  flex: 0 0 auto;
+  padding: calc(12px + env(safe-area-inset-top)) 16px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.bar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.app-title {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.badge b {
+  font-weight: 500;
+  color: var(--text-dim);
+}
+
+.badge-horror b { color: var(--accent-lit); }
+
+.surface-block {
+  background: var(--panel-2);
+  border-left: 2px solid var(--accent);
+  border-radius: 8px;
+  padding: 11px 14px;
+}
+
+.surface-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent-lit);
+  margin-bottom: 5px;
+}
+
+.surface-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.bar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.mode-chip {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+/* --------------------------------- 通用按钮 -------------------------------- */
+
+.btn {
+  font: inherit;
+  font-size: 13px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+
+.btn:hover:not(:disabled) { color: var(--text); border-color: #333a46; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-lit);
+  border-color: var(--accent-lit);
+  color: #fff;
+}
+
+.btn-guess {
+  width: 100%;
+  min-height: 42px;
+  background: transparent;
+  border-color: #3a2b2d;
+  color: var(--gold);
+}
+.btn-guess:hover:not(:disabled) { border-color: var(--gold); color: var(--gold); }
+
+.link-btn {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 6px;
+  font: inherit;
+  font-size: 12px;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.link-btn:hover { color: var(--text-dim); }
+
+/* --------------------------------- 对话区 --------------------------------- */
+
+.chat {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat::-webkit-scrollbar { width: 8px; }
+.chat::-webkit-scrollbar-thumb { background: #2a303a; border-radius: 4px; }
+.chat::-webkit-scrollbar-track { background: transparent; }
+
+.bubble {
+  max-width: 82%;
+  padding: 9px 13px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: rise .18s ease-out;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bubble { animation: none; }
+}
+
+.bubble.player {
+  align-self: flex-end;
+  background: #2c2024;
+  border: 1px solid #3d2a2f;
+  color: #f0e9e7;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble.ai {
+  align-self: flex-start;
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-bottom-left-radius: 4px;
+}
+
+.bubble.system {
+  align-self: center;
+  max-width: 92%;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-size: 12px;
+  text-align: center;
+}
+
+/* 受控词配色 */
+.bubble.k-yes      { color: var(--green); border-color: #24402f; }
+.bubble.k-no       { color: var(--red);   border-color: #402428; }
+.bubble.k-irrelevant { color: var(--text-dim); }
+.bubble.k-unknown  { color: var(--amber); border-color: #3f3222; }
+.bubble.k-win      { color: var(--gold);  border-color: #4a3b1d; background: #241d10; }
+.bubble.k-correct  { color: var(--green); border-color: #24402f; background: #16211a; }
+.bubble.k-close    { color: var(--amber); border-color: #3f3222; background: #221c12; }
+.bubble.k-wrong    { color: var(--red);   border-color: #402428; }
+.bubble.k-hint     { color: var(--gold);  background: #1a1710; border: 1px solid #3a3018; }
+.bubble.k-pending  { color: var(--text-faint); }
+.bubble.k-error    { color: var(--red); }
+
+/* --------------------------------- 输入栏 --------------------------------- */
+
+.composer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+}
+
+.composer-row {
+  display: flex;
+  gap: 8px;
+}
+
+#questionInput,
+#guessInput {
+  font: inherit;
+  font-size: 16px;
+  color: var(--text);
+  background: #0e1116;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+
+#questionInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 44px;
+}
+
+#questionInput::placeholder,
+#guessInput::placeholder { color: var(--text-faint); }
+
+#questionInput:focus,
+#guessInput:focus { outline: none; border-color: #3a4250; }
+
+/* ---------------------------------- 弹窗 ---------------------------------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(4, 5, 8, .78);
+}
+
+.modal[hidden] { display: none; }
+
+.modal-card {
+  width: 100%;
+  max-width: 480px;
+  max-height: 86dvh;
+  overflow-y: auto;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  animation: pop .2s ease-out;
+}
+
+.modal-card-reveal { border-color: #4a3b1d; }
+
+@keyframes pop {
+  from { opacity: 0; transform: scale(.97); }
+  to { opacity: 1; transform: none; }
+}
+
+.modal-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.modal-sub {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-dim);
+}
+
+#guessInput {
+  width: 100%;
+  resize: vertical;
+  min-height: 108px;
+  line-height: 1.65;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.modal-actions .btn { flex: 1 1 0; }
+
+.reveal-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+
+.reveal-text {
+  margin: 4px 0 0;
+  font-size: 14px;
+  line-height: 1.9;
+  color: #ded9d4;
+}
+
+/* --------------------------------- 移动端 --------------------------------- */
+
+@media (max-width: 520px) {
+  .puzzle-bar { padding-left: 14px; padding-right: 14px; }
+  .chat { padding: 14px; }
+  .composer { padding-left: 14px; padding-right: 14px; }
+  .bubble { max-width: 88%; }
+  .mode-chip { margin-left: 0; width: 100%; }
+  .modal-card { padding: 18px; }
+}
