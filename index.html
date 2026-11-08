@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0c10">
+  <title>AI 海龟汤（离线版）</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app">
+    <header class="puzzle-bar">
+      <div class="bar-top">
+        <span class="app-title">AI 海龟汤</span>
+        <div class="badges">
+          <span class="badge" id="difficultyBadge">难度 —</span>
+          <span class="badge badge-horror" id="horrorBadge">恐怖 —</span>
+        </div>
+      </div>
+
+      <div class="surface-block">
+        <span class="surface-label">汤面</span>
+        <p class="surface-text" id="surfaceText">正在抽取题目…</p>
+      </div>
+
+      <div class="bar-actions">
+        <button type="button" class="btn btn-ghost" id="hintBtn">提示</button>
+        <button type="button" class="btn btn-ghost" id="restartBtn">重开</button>
+        <button type="button" class="btn btn-ghost" id="newBtn">换一题</button>
+        <span class="mode-chip" id="modeChip"></span>
+      </div>
+    </header>
+
+    <main class="chat" id="chat" aria-live="polite"></main>
+
+    <footer class="composer">
+      <form class="composer-row" id="askForm" autocomplete="off">
+        <input
+          id="questionInput"
+          type="text"
+          maxlength="300"
+          placeholder="问一个能用是或否回答的问题…"
+          aria-label="你的问题">
+        <button type="submit" class="btn btn-primary" id="sendBtn">发送</button>
+      </form>
+      <button type="button" class="btn btn-guess" id="guessBtn">猜汤底</button>
+    </footer>
+  </div>
+
+  <div class="modal" id="guessModal" hidden>
+    <div class="modal-card">
+      <h2 class="modal-title">说出你的猜测</h2>
+      <p class="modal-sub">把整件事的来龙去脉写清楚，主持人会告诉你：正确、接近，还是错误。</p>
+      <textarea id="guessInput" rows="5" maxlength="300" placeholder="我认为，事情的真相是……"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="guessCancelBtn">取消</button>
+        <button type="button" class="btn btn-primary" id="guessSubmitBtn">提交猜测</button>
+      </div>
+      <button type="button" class="link-btn" id="giveUpBtn">放弃，直接看汤底</button>
+    </div>
+  </div>
+
+  <div class="modal" id="revealModal" hidden>
+    <div class="modal-card modal-card-reveal">
+      <span class="reveal-label" id="revealLabel">汤底</span>
+      <h2 class="modal-title" id="revealTitle"></h2>
+      <p class="reveal-text" id="revealText"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="revealRestartBtn">重开这题</button>
+        <button type="button" class="btn btn-primary" id="revealNewBtn">换一题</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="ghpages.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
